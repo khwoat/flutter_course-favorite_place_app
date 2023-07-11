@@ -49,9 +49,19 @@ class YourPlacesScreen extends ConsumerWidget {
                   onTap: () {
                     _pushPlaceDetailScreen(context, yourPlaces[index]);
                   },
+                  leading: CircleAvatar(
+                    radius: 20,
+                    backgroundImage: FileImage(yourPlaces[index].image),
+                  ),
                   title: Text(
                     yourPlaces[index].title,
                     style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subtitle: Text(
+                    yourPlaces[index].location.address,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                   ),
                 );
               },

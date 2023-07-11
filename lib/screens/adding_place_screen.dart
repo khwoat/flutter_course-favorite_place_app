@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:favorite_place_app/models/place.dart';
 import 'package:favorite_place_app/providers/your_places_provider.dart';
 import 'package:favorite_place_app/widgets/image_input.dart';
+import 'package:favorite_place_app/widgets/location_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,16 +20,8 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _titleController = TextEditingController();
-
-  late final YourPlacesNotifier _yourPlacesNotifier;
-
   File? _selectedImage;
-
-  @override
-  void initState() {
-    _yourPlacesNotifier = ref.read(yourPlacesProvider.notifier);
-    super.initState();
-  }
+  PlaceLocation? _selectedLocation;
 
   @override
   void dispose() {
@@ -37,10 +30,16 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
   }
 
   void _addPlace() {
-    if (_formKey.currentState!.validate()) {
-      _yourPlacesNotifier.addNewPlace(
-        Place(title: _titleController.text.trim(), image: _selectedImage!),
-      );
+    if (_formKey.currentState!.validate() &&
+        _selectedImage != null &&
+        _selectedLocation != null) {
+      ref.read(yourPlacesProvider.notifier).addNewPlace(
+            Place(
+              title: _titleController.text.trim(),
+              image: _selectedImage!,
+              location: _selectedLocation!,
+            ),
+          );
       Navigator.of(context).pop();
     }
   }
@@ -51,7 +50,7 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
       appBar: AppBar(
         title: const Text('Add New Place'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
           horizontal: 24,
@@ -79,12 +78,19 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
 
               //Image input
               ImageInput(
                 onSelectImage: (image) {
                   _selectedImage = image;
+                },
+              ),
+              const SizedBox(height: 10),
+
+              LocationInput(
+                onSelectLocation: (location) {
+                  _selectedLocation = location;
                 },
               ),
               const SizedBox(height: 16),
