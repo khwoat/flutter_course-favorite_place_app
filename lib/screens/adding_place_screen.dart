@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:favorite_place_app/models/place.dart';
 import 'package:favorite_place_app/providers/your_places_provider.dart';
 import 'package:favorite_place_app/widgets/image_input.dart';
@@ -20,6 +22,8 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
 
   late final YourPlacesNotifier _yourPlacesNotifier;
 
+  File? _selectedImage;
+
   @override
   void initState() {
     _yourPlacesNotifier = ref.read(yourPlacesProvider.notifier);
@@ -35,7 +39,7 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
   void _addPlace() {
     if (_formKey.currentState!.validate()) {
       _yourPlacesNotifier.addNewPlace(
-        Place(title: _titleController.text.trim()),
+        Place(title: _titleController.text.trim(), image: _selectedImage!),
       );
       Navigator.of(context).pop();
     }
@@ -78,7 +82,11 @@ class _AddingPlaceScreenState extends ConsumerState<AddingPlaceScreen> {
               const SizedBox(height: 16),
 
               //Image input
-              const ImageInput(),
+              ImageInput(
+                onSelectImage: (image) {
+                  _selectedImage = image;
+                },
+              ),
               const SizedBox(height: 16),
 
               // Add a new place button
