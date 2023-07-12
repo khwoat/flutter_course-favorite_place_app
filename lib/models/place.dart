@@ -15,6 +15,27 @@ class Place {
   final String title;
   final File image;
   final PlaceLocation location;
+
+  Place.fromDbQueryData(Map<String, Object?> queryData)
+      : id = queryData['id'] as String,
+        title = queryData['title'] as String,
+        image = File(queryData['image'] as String),
+        location = PlaceLocation(
+          latitude: queryData['lat'] as double,
+          longitude: queryData['lng'] as double,
+          address: queryData['address'] as String,
+        );
+
+  Map<String, dynamic> toDbJson() {
+    Map<String, dynamic> map = {};
+    map['id'] = id;
+    map['title'] = title;
+    map['image'] = image.path;
+    map['lat'] = location.latitude;
+    map['lng'] = location.longitude;
+    map['address'] = location.address;
+    return map;
+  }
 }
 
 class PlaceLocation {
