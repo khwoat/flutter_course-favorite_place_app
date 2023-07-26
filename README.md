@@ -1,6 +1,6 @@
 # favorite_place_app
 
-A new Flutter project.
+This project is the one of the training projects of Flutter & Dart - The Complete Guide course. From this project, I learned about Google Map API service for selecting favorite places and showing map that has selected.
 
 ## Getting Started
 
